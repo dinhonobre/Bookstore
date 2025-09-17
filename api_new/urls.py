@@ -9,11 +9,14 @@ from api_new.viewsets.category_viewsets import CategoryViewSet
 
 router = DefaultRouter()
 router.register(r'items', ItemViewSet, basename='item')
+<<<<<<< HEAD
 router.register(r'orders', OrderViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'categories', CategoryViewSet)
 
 
+=======
+>>>>>>> b4a327d (Adiciona autenticação via token e atualiza testes de paginação)
 
 urlpatterns = [
     path('', include(router.urls)),
