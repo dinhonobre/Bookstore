@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bookstore_network
+
+# Exemplo de serviço Django futuro
+# web:
+#   build: .
+#   container_name: django_web
+#   command: python manage.py runserver 0.0.0.0:8000
+#   volumes:
+#     - .:/app
+#   ports:
+#     - "8000:8000"
+#   depends_on:
+#     - db
+#   networks:
+#     - bookstore_network
+
+volumes:
+  postgres_data:
+
+networks:
+  bookstore_network:
+    driver: bridge

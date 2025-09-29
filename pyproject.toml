@@ -1,21 +1,25 @@
 [project]
-name = "exe-djangorest"
+name = "bookstore"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "anderson",email = "nobreanderson@hotmail.com"}
+    {name = "anderson", email = "nobreanderson@hotmail.com"}
 ]
-readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "django (>=5.2.6,<6.0.0)",
-    "djangorestframework (>=3.16.1,<4.0.0)"
+    "djangorestframework (>=3.16.1,<4.0.0)",
+    "psycopg2-binary",
+    "psycopg[binary] (>=3.2.10,<4.0.0)"
 ]
 
 [tool.poetry]
-packages = [{include = "exe"}]
-
+packages = [{include = "Bookstore"}]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "Bookstore.settings"
+python_files = ["tests.py", "test_*.py"]
