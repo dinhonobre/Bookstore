@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
-from .models import Product
-from .serializers import ProductSerializer
+from products.models.product import Product
+from products.serializers.product_serializer import ProductSerializer
 
 class ProductPagination(PageNumberPagination):
     page_size = 5

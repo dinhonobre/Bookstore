@@ -1,42 +1,35 @@
 # --- Base Python ---
-FROM python:3.13-slim as python-base
+FROM python:3.13-slim
 
 # --- Variáveis de ambiente ---
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.5.1 \
     POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
     POETRY_NO_INTERACTION=1 \
-    PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="/opt/pysetup/.venv" \
-    PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+    PATH="$POETRY_HOME/bin:$PATH"
 
 # --- Instala dependências do sistema ---
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
-        curl \
-        build-essential \
-        libpq-dev gcc \
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    curl \
+    build-essential \
+    libpq-dev gcc \
     && rm -rf /var/lib/apt/lists/*
 
 # --- Instala Poetry ---
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-# --- Diretório para setup das dependências ---
-WORKDIR $PYSETUP_PATH
-
-# --- Copia arquivos do Poetry para cache de dependências ---
-COPY poetry.lock pyproject.toml ./
-
-# --- Instala dependências (sem dev) ---
-RUN poetry install --no-dev
-
-# --- Diretório do projeto dentro do container ---
+# --- Diretório do projeto ---
 WORKDIR /app
+
+# --- Copia arquivos de dependências primeiro para cache do Docker ---
+COPY pyproject.toml poetry.lock* /app/
+
+# --- Instala dependências sem criar virtualenv isolada ---
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-dev --no-interaction --no-ansi
+
+# --- Copia o restante do projeto ---
 COPY . /app/
 
 # --- Porta padrão Django ---

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import Order
-from .serializers import OrderSerializer
+from orders.models.order import Order
+from orders.serializers.order_serializer import OrderSerializer
 from rest_framework.pagination import PageNumberPagination
 
 class OrderPagination(PageNumberPagination):
