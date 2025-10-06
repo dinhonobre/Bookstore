@@ -1,0 +1,45 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# =========================
+# Django / Banco de dados
+# =========================
+db.sqlite3           # banco local de desenvolvimento
+*.log                # logs de execução
+media/               # uploads de usuários
+staticfiles/         # arquivos estáticos coletados
+
+# =========================
+# Ambientes virtuais
+# =========================
+env/
+env_drf/
+venv/
+.venv/
+
+# =========================
+# IDEs / Editores
+# =========================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# =========================
+# Distribuição / Build
+# =========================
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# =========================
+# Sistema
+# =========================
+.DS_Store
+Thumbs.db

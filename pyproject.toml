@@ -1,21 +1,19 @@
-[project]
-name = "exe-djangorest"
-version = "0.1.0"
-description = ""
-authors = [
-    {name = "anderson",email = "nobreanderson@hotmail.com"}
-]
-readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "django (>=5.2.6,<6.0.0)",
-    "djangorestframework (>=3.16.1,<4.0.0)"
-]
-
 [tool.poetry]
-packages = [{include = "exe"}]
+name = "django_rest_project"
+version = "0.1.0"
+description = "Exercício Docker Django"
+authors = ["Anderson Nobre <nobreanderson@hotmail.com>"]
+packages = [{ include = "Bookstore" }]
 
+[tool.poetry.dependencies]
+python = ">=3.13"
+django = ">=5.2.6,<6.0.0"
+djangorestframework = ">=3.16.1,<4.0.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "Bookstore.settings"
+python_files = ["tests.py", "test_*.py"]
