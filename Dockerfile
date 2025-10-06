@@ -4,36 +4,37 @@ FROM python:3.13-slim
 # --- Variáveis de ambiente ---
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VERSION=1.5.1 \
-    POETRY_HOME="/opt/poetry" \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100 \
+    POETRY_VERSION=1.8.3 \
     POETRY_NO_INTERACTION=1 \
-    PATH="$POETRY_HOME/bin:$PATH"
+    POETRY_HOME="/root/.local" \
+    PATH="/root/.local/bin:$PATH"
 
 # --- Instala dependências do sistema ---
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    curl \
-    build-essential \
-    libpq-dev gcc \
-    && rm -rf /var/lib/apt/lists/*
+    curl build-essential libpq-dev gcc && \
+    rm -rf /var/lib/apt/lists/*
 
 # --- Instala Poetry ---
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-# --- Diretório do projeto ---
+# --- Define diretório de trabalho ---
 WORKDIR /app
 
-# --- Copia arquivos de dependências primeiro para cache do Docker ---
+# --- Copia arquivos de dependências ---
 COPY pyproject.toml poetry.lock* /app/
 
-# --- Instala dependências sem criar virtualenv isolada ---
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi
+# --- Instala dependências (sem virtualenv isolada e sem root package) ---
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-dev --no-interaction --no-ansi --no-root
 
 # --- Copia o restante do projeto ---
 COPY . /app/
 
-# --- Porta padrão Django ---
+# --- Expõe a porta padrão do Django ---
 EXPOSE 8000
 
-# --- Comando para rodar o servidor Django ---
+# --- Comando para rodar o servidor ---
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
