@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
+import dj_database_url
+
 
 from pathlib import Path
 
@@ -78,15 +81,13 @@ WSGI_APPLICATION = 'Bookstore.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'myuser',
-        'PASSWORD': 'mypassword',
-        'HOST': 'db', 
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://django_user:django_pass@db:5432/bookstore_db',
+        conn_max_age=600,
+        ssl_require=False
+    )
 }
+
 
 
 

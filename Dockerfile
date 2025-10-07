@@ -1,19 +1,9 @@
 # --- Base Python ---
-FROM python:3.13-slim as python-base
+FROM python:3.13-slim
 
 # --- Variáveis de ambiente ---
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
-    POETRY_VERSION=1.5.1 \
-    POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
-    POETRY_NO_INTERACTION=1 \
-    PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="/opt/pysetup/.venv" \
-    PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+    PYTHONDONTWRITEBYTECODE=1
 
 # --- Instala dependências do sistema ---
 RUN apt-get update \
@@ -23,21 +13,16 @@ RUN apt-get update \
         libpq-dev gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# --- Instala Poetry ---
-RUN curl -sSL https://install.python-poetry.org | python3 -
-
-# --- Diretório para setup das dependências ---
-WORKDIR $PYSETUP_PATH
-
-# --- Copia arquivos do Poetry para cache de dependências ---
-COPY poetry.lock pyproject.toml ./
-
-# --- Instala dependências (sem dev) ---
-RUN poetry install --no-dev
-
-# --- Diretório do projeto dentro do container ---
+# --- Diretório do projeto ---
 WORKDIR /app
+
+# --- Copia todo o código da aplicação ---
 COPY . /app/
+
+# --- Instala Poetry e as dependências diretamente no Python global ---
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.5.1 && \
+    /root/.local/bin/poetry config virtualenvs.create false && \
+    /root/.local/bin/poetry install --only main
 
 # --- Porta padrão Django ---
 EXPOSE 8000
