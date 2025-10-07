@@ -13,7 +13,7 @@ ENV PYTHONUNBUFFERED=1 \
     POETRY_NO_INTERACTION=1 \
     PYSETUP_PATH="/opt/pysetup" \
     VENV_PATH="/opt/pysetup/.venv" \
-    PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+    PATH="/opt/poetry/bin:$VENV_PATH/bin:$PATH"
 
 # --- Instala dependências do sistema ---
 RUN apt-get update \
@@ -26,14 +26,16 @@ RUN apt-get update \
 # --- Instala Poetry ---
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
+# --- Garante que o Poetry está no PATH ---
+ENV PATH="/opt/pysetup/.venv/bin:$PATH"
+
+
 # --- Diretório para setup das dependências ---
-WORKDIR $PYSETUP_PATH
+WORKDIR /opt/pysetup
+COPY poetry.lock pyproject.toml README.md ./
+COPY Bookstore ./Bookstore
+RUN /opt/poetry/bin/poetry install --only main
 
-# --- Copia arquivos do Poetry para cache de dependências ---
-COPY poetry.lock pyproject.toml ./
-
-# --- Instala dependências (sem dev) ---
-RUN poetry install --no-dev
 
 # --- Diretório do projeto dentro do container ---
 WORKDIR /app
@@ -44,3 +46,5 @@ EXPOSE 8000
 
 # --- Comando para rodar o servidor Django ---
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+

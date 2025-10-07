@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   db:
     image: postgres:15
@@ -14,19 +16,23 @@ services:
     networks:
       - bookstore_network
 
-# Exemplo de serviço Django futuro
-# web:
-#   build: .
-#   container_name: django_web
-#   command: python manage.py runserver 0.0.0.0:8000
-#   volumes:
-#     - .:/app
-#   ports:
-#     - "8000:8000"
-#   depends_on:
-#     - db
-#   networks:
-#     - bookstore_network
+  web:
+    build: .
+    container_name: django_web
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DJANGO_DB_HOST: db
+      DJANGO_DB_NAME: mydb
+      DJANGO_DB_USER: myuser
+      DJANGO_DB_PASSWORD: mypassword
+    volumes:
+      - .:/app
+    networks:
+      - bookstore_network
 
 volumes:
   postgres_data:
