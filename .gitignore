@@ -4,3 +4,7 @@ __pycache__/
 
 # Virtual environment
 env_drf/
+
+*.pyc
+__pycache__/
+*.sqlite3
