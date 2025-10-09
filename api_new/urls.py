@@ -7,6 +7,7 @@ from api_new.viewsets.product_viewsets import ProductViewSet
 from api_new.viewsets.category_viewsets import CategoryViewSet
 
 router = DefaultRouter()
+<<<<<<< HEAD
 router.register(r'orders', OrderViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'categories', CategoryViewSet)
@@ -14,4 +15,11 @@ router.register(r'categories', CategoryViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+=======
+router.register(r'items', ItemViewSet, basename='item')
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <- endpoint de login via token
+>>>>>>> feature/viewsets-tests
 ]

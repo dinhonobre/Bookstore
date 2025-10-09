@@ -1,4 +1,6 @@
-# Python cache
+
+
+# Python
 *.pyc
 __pycache__/
 
@@ -8,3 +10,4 @@ env_drf/
 *.pyc
 __pycache__/
 *.sqlite3
+env_drf/
