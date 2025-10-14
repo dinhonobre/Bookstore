@@ -16,14 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse  # <-- importar HttpResponse
+from django.http import HttpResponse  # para teste rápido
 
-# função simples de teste
 def home(request):
     return HttpResponse("Django rodando no Docker! ✅")
 
 urlpatterns = [
-    path('', home),  # <-- rota raiz
+    path('', home),
     path('admin/', admin.site.urls),
     path('api/', include('products.urls')),
     path('api/', include('orders.urls')),
